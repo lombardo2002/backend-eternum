@@ -14,7 +14,9 @@ import userRoutes from "./routes/users.js";
 const app = express();
 
 // middlewares
-app.use(cors());
+app.use(cors({
+  origin: 'https://eternum-eclat.netlify.app'
+}));
 app.use(express.json());
 app.use("/api/ordenes", ordenesRoutes);
 
