@@ -96,7 +96,8 @@ router.get("/:id", async (req, res) => {
     res.json(rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al obtener producto" });
+    res.status(500).json({ error: "Error al obtener producto", error });
+    res.status(500).json({ ok: false, error: error.message});
   }
 });
 
