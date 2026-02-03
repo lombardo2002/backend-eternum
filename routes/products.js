@@ -102,24 +102,31 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST crear producto (admin)
-router.post("/", uploads.single("imagen", 10), async (req, res) => {
+// POST crear producto (admin) - soporta múltiples imágenes
+router.post("/", uploads.array("imagen", 10), async (req, res) => {
   try {
     const { nombre, descripcion, precio, stock, material, tipo, destacado } = req.body;
+
+    // req.files será un array de imágenes subidas
     const imagenes = req.files ? req.files.map(f => f.filename) : [];
+
+    // La primera imagen será la "principal"
+    const imagenPrincipal = imagenes.length ? imagenes[0] : null;
 
     const [result] = await db.query(
       `INSERT INTO productos 
-      (nombre, descripcion, precio, stock, material, tipo, imagenes, destacado)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [nombre, descripcion, precio, stock, material, tipo, JSON.stringify(imagenes), destacado || 0]
+      (nombre, descripcion, precio, stock, material, tipo, imagen, imagenes, destacado)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [nombre, descripcion, precio, stock, material, tipo, imagenPrincipal, JSON.stringify(imagenes), destacado || 0]
     );
 
     res.json({ ok: true, id: result.insertId });
   } catch (error) {
-    console.error(error);
+    console.error("Error al crear producto:", error);
     res.status(500).json({ ok: false, error: "Error al crear producto" });
   }
 });
+
 
 // PUT editar producto (admin)
 router.put("/:id", async (req, res) => {
