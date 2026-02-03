@@ -56,7 +56,7 @@ router.post("/crear", async (req, res) => {
 router.get("/", verificarToken, soloAdmin, async (req, res) => {
   try {
     const [ordenes] = await db.query(
-      `SELECT id, cliente_nombre, cliente_telefono, total, estado, fecha
+      `SELECT o.id, o.cliente_nombre, o.cliente_telefono, o.total, o.estado, o.fecha
        FROM ordenes
        ORDER BY fecha DESC`,
     );
@@ -77,5 +77,27 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ ok: false });
   }
 });
+
+// Actualizar estado de una orden 
+router.put("/:id", verificarToken, soloAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    // Solo permitir los 3 estados válidos
+    const estadosValidos = ["pendiente", "pagado", "entregado"];
+    if (!estadosValidos.includes(estado)) {
+      return res.status(400).json({ ok: false, error: "Estado inválido" });
+    }
+
+    await db.query("UPDATE ordenes SET estado = ? WHERE id = ?", [estado, id]);
+
+    res.json({ ok: true, mensaje: `Orden ${id} actualizada a ${estado}` });
+  } catch (error) {
+    console.error("Error actualizando orden:", error);
+    res.status(500).json({ ok: false });
+  }
+});
+
 
 export default router;
