@@ -47,8 +47,8 @@ router.post("/crear", async (req, res) => {
 
     res.json({ ok: true, ordenId });
   } catch (error) {
-    console.error("Error creando orden:", error);
-    res.status(500).json({ ok: false });
+    console.error("Error creando orden:", error.sqlMessage);
+    res.status(500).json({ ok: false, error: error.sqlMessage });
   }
 });
 
