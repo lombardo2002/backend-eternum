@@ -102,7 +102,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST crear producto (admin) - soporta múltiples imágenes
-router.post("/", uploads.array("imagen", 10), async (req, res) => {
+router.post("/", uploads.array("imagenes", 10), async (req, res) => {
   try {
     const { nombre, descripcion, precio, stock, material, tipo, destacado } = req.body;
 
