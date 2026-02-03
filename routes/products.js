@@ -101,7 +101,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST crear producto (admin)
 // POST crear producto (admin) - soporta múltiples imágenes
 router.post("/", uploads.array("imagen", 10), async (req, res) => {
   try {
@@ -152,7 +151,7 @@ router.delete("/:id", async (req, res) => {
     res.json({ ok: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ ok: false });
+    res.status(500).json({ ok: false, error:error.message });
   }
 });
 
