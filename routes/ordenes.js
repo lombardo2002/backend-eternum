@@ -4,11 +4,10 @@ import { verificarToken, soloAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// 🛒 Crear orden (usuario logueado)
+// 🛒 Crear orden
 router.post("/crear", async (req, res) => {
   try {
-    const { carrito } = req.body;
-    const usuario_id = null;
+    const { carrito, nombre, telefono } = req.body;
 
     if (!carrito || carrito.length === 0) {
       return res.status(400).json({ ok: false, error: "Carrito vacío" });
@@ -26,8 +25,8 @@ router.post("/crear", async (req, res) => {
     }
 
     const [ordenResult] = await db.query(
-      "INSERT INTO ordenes (id_usuario, total, estado) VALUES (?, ?, ?)",
-      [usuario_id, total, "pendiente"]
+      "INSERT INTO ordenes (id_usuario, cliente_nombre, cliente_telefono, total, estado) VALUES (?, ?, ?, ?, ?)",
+      [null, nombre, telefono, total, "pendiente"]
     );
 
     const ordenId = ordenResult.insertId;
@@ -47,12 +46,13 @@ router.post("/crear", async (req, res) => {
     }
 
     res.json({ ok: true, ordenId });
-
   } catch (error) {
     console.error("Error creando orden:", error);
     res.status(500).json({ ok: false });
   }
 });
+
+
 
 // 📋 Ver órdenes → SOLO ADMIN
 router.get("/", verificarToken, soloAdmin, async (req, res) => {
