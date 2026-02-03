@@ -5,10 +5,10 @@ import { verificarToken, soloAdmin } from "../middlewares/auth.js";
 const router = express.Router();
 
 // 🛒 Crear orden (usuario logueado)
-router.post("/crear", verificarToken, async (req, res) => {
+router.post("/crear", async (req, res) => {
   try {
     const { carrito } = req.body;
-    const usuario_id = req.usuario.id;
+    const usuario_id = null;
 
     if (!carrito || carrito.length === 0) {
       return res.status(400).json({ ok: false, error: "Carrito vacío" });
