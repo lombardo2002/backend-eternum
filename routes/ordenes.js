@@ -60,6 +60,9 @@ router.get("/", verificarToken, soloAdmin, async (req, res) => {
        FROM ordenes
        ORDER BY fecha DESC`,
     );
+
+    console.log("Ordenes desde BD", ordenes);
+    
     res.json({ ok: true, data: ordenes });
   } catch (error) {
     console.error("Error obteniendo órdenes:", error);

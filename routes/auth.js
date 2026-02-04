@@ -5,39 +5,6 @@ import jwt from "jsonwebtoken";
 
 const router = Router();
 
-// REGISTRO
-router.post("/register", async (req, res) => {
-  const { nombre, email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ error: "Datos incompletos" });
-  }
-
-  try {
-    const [existe] = await db.query(
-      "SELECT id FROM usuarios WHERE email = ?",
-      [email]
-    );
-
-    if (existe.length) {
-      return res.status(400).json({ error: "Usuario ya existe" });
-    }
-
-    // 🔐 Encriptar password
-    const hash = await bcrypt.hash(password, 10);
-
-    await db.query(
-      "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)",
-      [nombre, email, hash]
-    );
-
-    res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error al registrar" });
-  }
-});
-
 // LOGIN
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
