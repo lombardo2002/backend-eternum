@@ -79,7 +79,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Actualizar estado de una orden 
-router.put("/:id", verificarToken, soloAdmin, async (req, res) => {
+router.put("/:id", soloAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { estado } = req.body;

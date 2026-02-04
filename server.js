@@ -27,7 +27,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/pagos", pagosRoutes);
 app.use ("/api/users", userRoutes);
 app.use("/uploads", express.static("uploads"));
-app.use("/api/ordenes", ordenesRoutes);
 
 // prueba
 app.get("/", (req, res) => {
