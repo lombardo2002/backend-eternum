@@ -57,12 +57,12 @@ router.get("/", verificarToken, soloAdmin, async (req, res) => {
   try {
     const [ordenes] = await db.query(
       `SELECT o.id, o.cliente_nombre, o.cliente_telefono, o.total, o.estado, o.fecha
-       FROM ordenes
-       ORDER BY fecha DESC`,
+   FROM ordenes o
+   ORDER BY o.fecha DESC`,
     );
 
     console.log("Ordenes desde BD", ordenes);
-    
+
     res.json({ ok: true, data: ordenes });
   } catch (error) {
     console.error("Error obteniendo órdenes:", error);
@@ -81,7 +81,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Actualizar estado de una orden 
+// Actualizar estado de una orden
 router.put("/:id", soloAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -101,6 +101,5 @@ router.put("/:id", soloAdmin, async (req, res) => {
     res.status(500).json({ ok: false });
   }
 });
-
 
 export default router;
